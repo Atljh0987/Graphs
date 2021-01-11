@@ -64,6 +64,11 @@ namespace Graphs
             return forward[from][to];
         }
 
+        public int InArcsCount(int peak)
+        {
+            return reverse[peak].Count;
+        }
+
         public IEnumerable<Tuple<int, T>> InComingArcs(int peak)
         {
             if (Oriented)

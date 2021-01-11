@@ -21,6 +21,7 @@ namespace Graphs
     {
         bool AddArc(int from, int to, T weight);
         T GetWeight(int from, int to);
+        int InArcsCount(int peak);
         IEnumerable<Tuple<int, T>> OutGoingArcs(int peak);
         IEnumerable<Tuple<int, T>> InComingArcs(int peak);
     }
@@ -28,6 +29,7 @@ namespace Graphs
     public interface IUnweightedGraph : IGraph
     {
         bool AddArc(int from, int to);
+        int InArcsCount(int peak);
         IEnumerable<int> OutGoingArcs(int peak);
         IEnumerable<int> InComingArcs(int peak);
     }

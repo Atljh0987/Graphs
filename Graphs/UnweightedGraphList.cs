@@ -61,6 +61,10 @@ namespace Graphs
             foreach (var el in set)
                 yield return el;
         }
+        public int InArcsCount(int peak)
+        {
+            return reverse[peak].Count;
+        }
 
         public IEnumerable<int> InComingArcs(int peak)
         {

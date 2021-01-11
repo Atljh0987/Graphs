@@ -86,6 +86,19 @@ namespace Graphs
             return matrix[from, to].Weight;
         }
 
+        public int InArcsCount(int peak)
+        {
+            int count = 0;
+
+            for (int i = 0; i < matrix.Length; i++)
+            {
+                if (i != peak && matrix[peak, i].Exist)
+                    count++;
+            }
+
+            return count;
+        }
+
         public IEnumerable<Tuple<int, T>> InComingArcs(int peak)
         {
             for (int i = 0; i < matrix.Length; i++)

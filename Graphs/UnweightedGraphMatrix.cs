@@ -160,6 +160,18 @@ namespace Graphs
             if(result) matrix[from, to] = true;
             return result;
         }
+        public int InArcsCount(int peak)
+        {
+            int count = 0;
+
+            for (int i = 0; i < matrix.Length; i++)
+            {
+                if (i != peak && matrix[i, peak])
+                    count++;
+            }
+
+            return count;
+        }
 
         public IEnumerable<int> OutGoingArcs(int peak)
         {

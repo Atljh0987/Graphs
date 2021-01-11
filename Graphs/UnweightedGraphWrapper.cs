@@ -38,6 +38,11 @@ namespace Graphs
             return weightedGraph.DeleteArc(from, to);
         }
 
+        public int InArcsCount(int peak)
+        {
+            return weightedGraph.InArcsCount(peak);
+        }
+
         public IEnumerable<int> InComingArcs(int peak)
         {
             return weightedGraph.InComingArcs(peak).Select(el => el.Item1);
