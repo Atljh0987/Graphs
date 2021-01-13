@@ -50,9 +50,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="TriangleMatrixTest.cs" />
+    <Compile Include="UnweightedMatrixTest.cs" />
     <Compile Include="UnweightedListTestRemovePeaks.cs" />
     <Compile Include="UnweightedListTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UnweightedMatrixTestRemovePeaks.cs" />
     <Compile Include="WeightedListTest.cs" />
   </ItemGroup>
   <ItemGroup>

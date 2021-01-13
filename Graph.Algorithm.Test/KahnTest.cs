@@ -39,15 +39,15 @@ namespace Graph.Algorithm.Test
         [TestMethod]
         public void ThreePeaks()
         {
-            UnweightedGraphMatrix graph = new UnweightedGraphMatrix(true, 3);
-            graph.AddArc(1, 0);
-            graph.AddArc(1, 2);
+            WeightedGraphMatrix<int> graph = new WeightedGraphMatrix<int>(true, 3);
+            graph.AddArc(1, 0, 2);
+            graph.AddArc(1, 2, 3);
 
-            graph.AddArc(0, 2);
+            graph.AddArc(0, 2, 4);
 
-            Assert.AreEqual(1, Kahn.Run(graph)[0]);
-            Assert.AreEqual(0, Kahn.Run(graph)[1]);
-            Assert.AreEqual(2, Kahn.Run(graph)[2]);
+            Assert.AreEqual(1, Kahn.Run(new UnweightedGraphWrapper<int>(graph))[0]);
+            Assert.AreEqual(0, Kahn.Run(new UnweightedGraphWrapper<int>(graph))[1]);
+            Assert.AreEqual(2, Kahn.Run(new UnweightedGraphWrapper<int>(graph))[2]);
         }
 
         [TestMethod]

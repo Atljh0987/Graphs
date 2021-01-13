@@ -34,7 +34,7 @@ namespace Graph.Test
             Assert.IsFalse(graph.Oriented);
         }
 
-        [TestMethod, ExpectedException(typeof(ArgumentOutOfRangeException))]
+        [TestMethod, ExpectedException(typeof(IndexOutOfRangeException))]
         public void IncorrectPeak()
         {
             UnweightedList graph = new UnweightedList(false);

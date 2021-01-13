@@ -19,8 +19,6 @@ namespace Graphs.Algorithms
             {
                 int sortedElementsCount = 0;
                 int previousPassageCount = 0;
-                int test = 0;
-                int correct = 0;
 
                 for(int i = 0; i < CountOutputArcs.Length; i++)
                 {

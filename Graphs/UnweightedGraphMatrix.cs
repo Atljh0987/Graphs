@@ -14,10 +14,13 @@ namespace Graphs
 
         public int PeakCount => matrix.Length;
 
+        private int[] inArcsCount;
+
         public UnweightedGraphMatrix(bool oriented, int length)
         {
             if (oriented) matrix = new BitsSquareMatrix(length);
             else matrix = new BitsTriangleMatrix(length);
+            inArcsCount = new int[length];
         }
 
         public void AddPeak()
@@ -48,6 +51,7 @@ namespace Graphs
             }
 
             matrix = tmp;
+            Array.Resize(ref inArcsCount, matrix.Length);
         }
 
         public bool ContainsArc(int from, int to)
@@ -62,30 +66,15 @@ namespace Graphs
         {
             CheckPeaks(from, to);
             bool result = matrix[from, to];
-            if(result) matrix[from, to] = false;
+            if (result)
+            {
+                matrix[from, to] = false;
+                inArcsCount[to]--;
+            }
             return result;
         }
 
-        //private void Bypasser(bool oriented, int v)
-        //{
-        //    int iVal = 0;
-        //    int jVal = 0;
-
-        //    for (int i = 0; i < v; i++)
-        //    {
-        //        for (int j = 0; j < v; j++)
-        //        {
-        //            if (i != j) tmp[i, j] = matrix[i, j];
-        //        }
-
-        //        for (int j = v + 1; j < PeakCount; j++)
-        //        {
-        //            if (i != j - 1) tmp[i, j - 1] = matrix[i, j];
-        //        }
-        //    }
-        //}
-
-        public void RemovePeak(int v) //// 1!!!!!!!!!!!!!!!!!!!!!
+        public void RemovePeak(int v) //// !!!!!!!!!!!!!!!!!!!!! Походу невозможно, либо неадекватно
         {
             if ((uint)v > (uint)PeakCount) throw new IndexOutOfRangeException("v");
 
@@ -98,27 +87,19 @@ namespace Graphs
                 for (int i = 0; i < v; i++)
                 {
                     for (int j = 0; j < v; j++)
-                    {
-                        if (i != j) tmp[i, j] = matrix[i, j];
-                    }
+                        if (i != j) tmp[i, j] = matrix[i, j];                    
 
                     for (int j = v + 1; j < PeakCount; j++)
-                    {
                         if (i != j - 1) tmp[i, j - 1] = matrix[i, j];
-                    }
                 }
 
                 for (int i = v + 1; i < PeakCount; i++)
                 {
                     for (int j = 0; j < v; j++)
-                    {
                         if (i - 1 != j) tmp[i - 1, j] = matrix[i, j];
-                    }
 
                     for (int j = v + 1; j < PeakCount; j++)
-                    {
                         if (i != j) tmp[i - 1, j - 1] = matrix[i, j];
-                    }
                 }
             }
             else
@@ -126,54 +107,56 @@ namespace Graphs
                 for(int i = 0; i < v; i++)
                 {
                     for(int j = i + 1; j < v; j++)
-                    {
                         tmp[i, j] = matrix[i, j];
-                    }
 
                     for(int j = v + 1; j < PeakCount; j++)
-                    {
                         tmp[i, j - 1] = matrix[i, j];
-                    }
                 }
 
                 for(int i = v + 1; i < PeakCount; i++)
                 {
                     for (int j = i + 1; j < v; j++)
-                    {
                         tmp[i - 1, j] = matrix[i, j];
-                    }
 
                     for (int j = v + 1; j < PeakCount; j++)
-                    {
                         tmp[i - 1, j - 1] = matrix[i, j];
-                    }
                 }
             }
 
             matrix = tmp;
+            inArcsCount = new int[matrix.Length];
+
+            for(int i = 0; i < matrix.Length; i++)   /// !!!!!!!!!!!!
+            {
+                for(int j = 0; j < matrix.Length; j++)
+                {
+                    if (i == j) continue;
+
+                    if(matrix[i,j])
+                    {
+                        inArcsCount[j]++;
+                    }
+                }
+            }
         }
 
         public bool AddArc(int from, int to)
         {
             CheckPeaks(from, to);
             bool result = !matrix[from, to];
-            if(result) matrix[from, to] = true;
+            if (result)
+            {
+                matrix[from, to] = true;
+                inArcsCount[to]++;
+            }
             return result;
         }
         public int InArcsCount(int peak)
         {
-            int count = 0;
-
-            for (int i = 0; i < matrix.Length; i++)
-            {
-                if (i != peak && matrix[i, peak])
-                    count++;
-            }
-
-            return count;
+            return inArcsCount[peak];
         }
 
-        public IEnumerable<int> OutGoingArcs(int peak)
+        public IEnumerable<int> OutGoingArcs(int peak)  // !!!!
         {
             for(int i = 0; i < matrix.Length; i++)
             {

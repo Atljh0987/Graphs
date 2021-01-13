@@ -23,7 +23,7 @@ namespace Graphs
         public bool AddArc(int from, int to)
         {
             if ((uint) to >= (uint)PeakCount)    // забыл почему from не может выйти за границы? List проверяет правильность from
-                throw new ArgumentOutOfRangeException("to");
+                throw new IndexOutOfRangeException("to");
             CheckPeaks(from, to);
             bool result = forward[from].Add(to);
             if (reverse != null) reverse[to].Add(from);
@@ -63,7 +63,7 @@ namespace Graphs
         }
         public int InArcsCount(int peak)
         {
-            return reverse[peak].Count;
+            return (reverse ?? forward)[peak].Count;
         }
 
         public IEnumerable<int> InComingArcs(int peak)

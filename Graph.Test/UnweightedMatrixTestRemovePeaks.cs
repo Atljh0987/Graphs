@@ -6,15 +6,12 @@ using System.Collections.Generic;
 namespace Graph.Test
 {
     [TestClass]
-    public class UnweightedListTestRemovePeak
+    public class UnweightedMatrixTestRemovePeak
     {
         [TestMethod]
         public void CountAfterRemove()
         {
-            UnweightedList graph = new UnweightedList(false);
-            graph.AddPeak();
-            graph.AddPeak();
-            graph.AddPeak();
+            UnweightedGraphMatrix graph = new UnweightedGraphMatrix(false, 3);
             graph.AddArc(0, 1);
             graph.AddArc(1, 2);
             graph.AddArc(2, 0);
@@ -24,13 +21,10 @@ namespace Graph.Test
             Assert.AreEqual(2, graph.PeakCount);
         }
 
-        [TestMethod, ExpectedException(typeof(ArgumentOutOfRangeException))]
+        [TestMethod, ExpectedException(typeof(IndexOutOfRangeException))]
         public void RemovePeakRangeException()
         {
-            UnweightedList graph = new UnweightedList(false);
-            graph.AddPeak();
-            graph.AddPeak();
-            graph.AddPeak();
+            UnweightedGraphMatrix graph = new UnweightedGraphMatrix(false, 3);
             graph.AddArc(0, 1);
             graph.AddArc(1, 2);
             graph.AddArc(2, 0);
@@ -42,10 +36,7 @@ namespace Graph.Test
         [TestMethod]
         public void RemovePeakThreeElFromEndCorrect()
         {
-            UnweightedList graph = new UnweightedList(false);
-            graph.AddPeak();
-            graph.AddPeak();
-            graph.AddPeak();
+            UnweightedGraphMatrix graph = new UnweightedGraphMatrix(false, 3);
             graph.AddArc(0, 1);
             graph.AddArc(1, 2);
             graph.AddArc(2, 0);
@@ -59,19 +50,16 @@ namespace Graph.Test
             Assert.IsTrue(graph.ContainsArc(1, 0));
         }
 
-        [TestMethod, ExpectedException(typeof(ArgumentOutOfRangeException))]
+        [TestMethod, ExpectedException(typeof(IndexOutOfRangeException))]
         public void RemovePeakThreeElFromEndInorrect()
         {
-            UnweightedList graph = new UnweightedList(false);
-            graph.AddPeak();
-            graph.AddPeak();
-            graph.AddPeak();
+            UnweightedGraphMatrix graph = new UnweightedGraphMatrix(false, 3);
             graph.AddArc(0, 1);
             graph.AddArc(1, 2);
             graph.AddArc(2, 0);
 
             graph.RemovePeak(2);
-            
+
             Assert.IsTrue(graph.ContainsArc(2, 1));
             Assert.IsTrue(graph.ContainsArc(1, 2));
         }
@@ -79,10 +67,7 @@ namespace Graph.Test
         [TestMethod]
         public void RemovePeakThreeElFromMiddleCorrect()
         {
-            UnweightedList graph = new UnweightedList(false);
-            graph.AddPeak();
-            graph.AddPeak();
-            graph.AddPeak();
+            UnweightedGraphMatrix graph = new UnweightedGraphMatrix(false, 3);
             graph.AddArc(0, 1);
             graph.AddArc(1, 2);
             graph.AddArc(2, 0);
@@ -94,13 +79,10 @@ namespace Graph.Test
             Assert.IsTrue(graph.ContainsArc(0, 1));
         }
 
-        [TestMethod, ExpectedException(typeof(ArgumentOutOfRangeException))]
+        [TestMethod, ExpectedException(typeof(IndexOutOfRangeException))]
         public void RemovePeakThreeElFromMiddleIncorrect()
         {
-            UnweightedList graph = new UnweightedList(false);
-            graph.AddPeak();
-            graph.AddPeak();
-            graph.AddPeak();
+            UnweightedGraphMatrix graph = new UnweightedGraphMatrix(false, 3);
             graph.AddArc(0, 1);
             graph.AddArc(1, 2);
             graph.AddArc(2, 0);
@@ -114,12 +96,7 @@ namespace Graph.Test
         [TestMethod]
         public void RemovePeakFiveElFromMiddleCorrect()
         {
-            UnweightedList graph = new UnweightedList(false);
-            graph.AddPeak();
-            graph.AddPeak();
-            graph.AddPeak();
-            graph.AddPeak();
-            graph.AddPeak();
+            UnweightedGraphMatrix graph = new UnweightedGraphMatrix(false, 5);
 
             Dictionary<char, int> peakCodes = new Dictionary<char, int>
             {
@@ -161,14 +138,7 @@ namespace Graph.Test
         [TestMethod]
         public void RemovePeakSevenElFromMiddleCorrect()
         {
-            UnweightedList graph = new UnweightedList(true);
-            graph.AddPeak();
-            graph.AddPeak();
-            graph.AddPeak();
-            graph.AddPeak();
-            graph.AddPeak();
-            graph.AddPeak();
-            graph.AddPeak();
+            UnweightedGraphMatrix graph = new UnweightedGraphMatrix(true, 7);
 
             PeakCodes peakCounts = new PeakCodes()
             {
@@ -329,83 +299,6 @@ namespace Graph.Test
         }
 
         [TestMethod]
-        public void InArcsCountAddRemovePeak()
-        {
-            UnweightedList graph = new UnweightedList(true);
-            graph.AddPeak();
-            graph.AddPeak();
-            graph.AddPeak();
-            graph.AddPeak();
-            graph.AddPeak();
-
-            Dictionary<char, int> peakCodes = new Dictionary<char, int>
-            {
-                ['a'] = 0,
-                ['b'] = 1,
-                ['c'] = 2,
-                ['d'] = 3,
-                ['e'] = 4
-            };
-
-            graph.AddArc(peakCodes['a'], peakCodes['b']);
-            graph.AddArc(peakCodes['a'], peakCodes['c']);
-            graph.AddArc(peakCodes['a'], peakCodes['e']);
-
-            graph.AddArc(peakCodes['b'], peakCodes['c']);
-
-            graph.AddArc(peakCodes['d'], peakCodes['b']);
-
-            graph.AddArc(peakCodes['e'], peakCodes['b']);
-            graph.AddArc(peakCodes['e'], peakCodes['c']);
-
-            
-
-            graph.RemovePeak(peakCodes['b']);
-            peakCodes.Remove('b');
-            peakCodes['c'] = 1;
-            peakCodes['d'] = 2;
-            peakCodes['e'] = 3;
-
-            Assert.AreEqual(0, graph.InArcsCount(peakCodes['a']));
-            Assert.AreEqual(2, graph.InArcsCount(peakCodes['c']));
-            Assert.AreEqual(0, graph.InArcsCount(peakCodes['d']));
-            Assert.AreEqual(1, graph.InArcsCount(peakCodes['e']));
-
-            Assert.IsTrue(graph.ContainsArc(peakCodes['a'], peakCodes['c']));
-            Assert.IsFalse(graph.ContainsArc(peakCodes['a'], peakCodes['d']));
-            Assert.IsTrue(graph.ContainsArc(peakCodes['a'], peakCodes['e']));
-
-            Assert.IsFalse(graph.ContainsArc(peakCodes['c'], peakCodes['a']));
-            Assert.IsFalse(graph.ContainsArc(peakCodes['c'], peakCodes['d']));
-            Assert.IsFalse(graph.ContainsArc(peakCodes['c'], 3));
-
-            Assert.IsFalse(graph.ContainsArc(peakCodes['d'], peakCodes['a']));
-            Assert.IsFalse(graph.ContainsArc(peakCodes['d'], peakCodes['c']));
-            Assert.IsFalse(graph.ContainsArc(peakCodes['d'], peakCodes['e']));
-
-            Assert.IsFalse(graph.ContainsArc(peakCodes['e'], peakCodes['a']));
-            Assert.IsTrue(graph.ContainsArc(peakCodes['e'], peakCodes['c']));
-            Assert.IsFalse(graph.ContainsArc(peakCodes['e'], peakCodes['d']));
-
-
-            graph.RemovePeak(peakCodes['e']);
-            peakCodes.Remove('e');
-
-            Assert.AreEqual(1, graph.InArcsCount(peakCodes['c'])); // ??? - фактически 0
-            Assert.AreEqual(0, graph.InArcsCount(peakCodes['a'])); // ??? - фактически 1
-            Assert.AreEqual(0, graph.InArcsCount(peakCodes['d']));
-
-            Assert.IsTrue(graph.ContainsArc(peakCodes['a'], peakCodes['c']));
-            Assert.IsFalse(graph.ContainsArc(peakCodes['a'], peakCodes['d']));
-
-            Assert.IsFalse(graph.ContainsArc(peakCodes['c'], peakCodes['a']));
-            Assert.IsFalse(graph.ContainsArc(peakCodes['c'], peakCodes['d']));
-
-            Assert.IsFalse(graph.ContainsArc(peakCodes['d'], peakCodes['a']));
-            Assert.IsFalse(graph.ContainsArc(peakCodes['d'], peakCodes['c']));
-        }
-
-        [TestMethod]
         public void RemovePeakMatrixFiveRemove()
         {
             UnweightedGraphMatrix graph = new UnweightedGraphMatrix(false, 5);
@@ -447,16 +340,10 @@ namespace Graph.Test
             Assert.IsFalse(graph.ContainsArc(peakCodes['e'], peakCodes['b']));
         }
 
-
         [TestMethod]
         public void RemovePeakMatrixFiveRemoveModern()
         {
-            UnweightedList graph = new UnweightedList(true);
-            graph.AddPeak();
-            graph.AddPeak();
-            graph.AddPeak();
-            graph.AddPeak();
-            graph.AddPeak();
+            UnweightedGraphMatrix graph = new UnweightedGraphMatrix(true, 5);
 
             Dictionary<char, int> peakCodes = new Dictionary<char, int>
             {
@@ -507,6 +394,6 @@ namespace Graph.Test
             Assert.IsFalse(graph.ContainsArc(peakCodes['d'], peakCodes['b']));
         }
 
-        // Проверить при HashSet пустой ?? А где он должен быть?
+        // Проверить при HashSet пустой
     }
 }

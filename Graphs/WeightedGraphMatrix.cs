@@ -92,7 +92,7 @@ namespace Graphs
 
             for (int i = 0; i < matrix.Length; i++)
             {
-                if (i != peak && matrix[peak, i].Exist)
+                if (i != peak && matrix[i, peak].Exist)
                     count++;
             }
 
@@ -103,7 +103,7 @@ namespace Graphs
         {
             for (int i = 0; i < matrix.Length; i++)
             {
-                if (i != peak && matrix[peak, i].Exist)
+                if (i != peak && matrix[i, peak].Exist)
                     yield return new Tuple<int, T>(i, matrix[i, peak].Weight);
             }
         }
