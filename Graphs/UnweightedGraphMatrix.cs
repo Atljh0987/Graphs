@@ -64,12 +64,14 @@ namespace Graphs
 
         public bool DeleteArc(int from, int to)
         {
+            if (!matrix[from, to]) throw new ArgumentException("Arc doesn't exist");
             CheckPeaks(from, to);
             bool result = matrix[from, to];
             if (result)
             {
                 matrix[from, to] = false;
                 inArcsCount[to]--;
+                if (!Oriented) inArcsCount[from]--;
             }
             return result;
         }
@@ -79,8 +81,8 @@ namespace Graphs
             if ((uint)v > (uint)PeakCount) throw new IndexOutOfRangeException("v");
 
             IMatrix<bool> tmp;
-            if (Oriented) tmp = new SquareMatrix<bool>(PeakCount - 1);
-            else tmp = new TriangleMatrix<bool>(PeakCount - 1);
+            if (Oriented) tmp = new BitsSquareMatrix(PeakCount - 1);   // нужны битовые матрицы
+            else tmp = new BitsTriangleMatrix(PeakCount - 1);
 
             if (Oriented)
             {
@@ -124,6 +126,7 @@ namespace Graphs
             }
 
             matrix = tmp;
+
             inArcsCount = new int[matrix.Length];
 
             for(int i = 0; i < matrix.Length; i++)   /// !!!!!!!!!!!!
@@ -142,12 +145,14 @@ namespace Graphs
 
         public bool AddArc(int from, int to)
         {
+            if (matrix[from, to]) throw new ArgumentException("Arc is already exist");
             CheckPeaks(from, to);
             bool result = !matrix[from, to];
             if (result)
             {
                 matrix[from, to] = true;
                 inArcsCount[to]++;
+                if (!Oriented) inArcsCount[from]++;
             }
             return result;
         }

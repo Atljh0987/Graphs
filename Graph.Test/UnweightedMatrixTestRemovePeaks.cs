@@ -8,33 +8,16 @@ namespace Graph.Test
     [TestClass]
     public class UnweightedMatrixTestRemovePeak
     {
-        [TestMethod]
-        public void CountAfterRemove()
+        class PeakCodes : List<char>
         {
-            UnweightedGraphMatrix graph = new UnweightedGraphMatrix(false, 3);
-            graph.AddArc(0, 1);
-            graph.AddArc(1, 2);
-            graph.AddArc(2, 0);
-
-            Assert.AreEqual(3, graph.PeakCount);
-            graph.RemovePeak(2);
-            Assert.AreEqual(2, graph.PeakCount);
+            public int this[char code] => IndexOf(code);
         }
 
-        [TestMethod, ExpectedException(typeof(IndexOutOfRangeException))]
-        public void RemovePeakRangeException()
-        {
-            UnweightedGraphMatrix graph = new UnweightedGraphMatrix(false, 3);
-            graph.AddArc(0, 1);
-            graph.AddArc(1, 2);
-            graph.AddArc(2, 0);
+        
 
-            graph.RemovePeak(4);
-            graph.RemovePeak(-1);
-        }
 
         [TestMethod]
-        public void RemovePeakThreeElFromEndCorrect()
+        public void ThreeElFromEndCorrect()
         {
             UnweightedGraphMatrix graph = new UnweightedGraphMatrix(false, 3);
             graph.AddArc(0, 1);
@@ -51,7 +34,7 @@ namespace Graph.Test
         }
 
         [TestMethod, ExpectedException(typeof(IndexOutOfRangeException))]
-        public void RemovePeakThreeElFromEndInorrect()
+        public void ThreeElFromEndInorrect()
         {
             UnweightedGraphMatrix graph = new UnweightedGraphMatrix(false, 3);
             graph.AddArc(0, 1);
@@ -65,7 +48,7 @@ namespace Graph.Test
         }
 
         [TestMethod]
-        public void RemovePeakThreeElFromMiddleCorrect()
+        public void ThreeElFromMiddleCorrect()
         {
             UnweightedGraphMatrix graph = new UnweightedGraphMatrix(false, 3);
             graph.AddArc(0, 1);
@@ -80,7 +63,7 @@ namespace Graph.Test
         }
 
         [TestMethod, ExpectedException(typeof(IndexOutOfRangeException))]
-        public void RemovePeakThreeElFromMiddleIncorrect()
+        public void ThreeElFromMiddleIncorrect()
         {
             UnweightedGraphMatrix graph = new UnweightedGraphMatrix(false, 3);
             graph.AddArc(0, 1);
@@ -94,7 +77,7 @@ namespace Graph.Test
         }
 
         [TestMethod]
-        public void RemovePeakFiveElFromMiddleCorrect()
+        public void FiveElFromMiddleCorrect()
         {
             UnweightedGraphMatrix graph = new UnweightedGraphMatrix(false, 5);
 
@@ -136,7 +119,7 @@ namespace Graph.Test
         }
 
         [TestMethod]
-        public void RemovePeakSevenElFromMiddleCorrect()
+        public void SevenElFromMiddleCorrect()
         {
             UnweightedGraphMatrix graph = new UnweightedGraphMatrix(true, 7);
 
@@ -207,13 +190,8 @@ namespace Graph.Test
             Assert.IsFalse(graph.ContainsArc(peakCounts['g'], peakCounts['b']));
         }
 
-        class PeakCodes : List<char>
-        {
-            public int this[char code] => IndexOf(code);
-        }
-
         [TestMethod]
-        public void RemovePeakSquareMatrixSeven()
+        public void SquareMatrixSeven()
         {
             UnweightedGraphMatrix graph = new UnweightedGraphMatrix(true, 7);
 
@@ -284,7 +262,7 @@ namespace Graph.Test
         }
 
         [TestMethod]
-        public void RemovePeakMatrixThree()
+        public void MatrixThree()
         {
             UnweightedGraphMatrix graph = new UnweightedGraphMatrix(false, 3);
             graph.AddArc(0, 1);
@@ -299,7 +277,7 @@ namespace Graph.Test
         }
 
         [TestMethod]
-        public void RemovePeakMatrixFiveRemove()
+        public void MatrixFive()
         {
             UnweightedGraphMatrix graph = new UnweightedGraphMatrix(false, 5);
 
@@ -341,7 +319,7 @@ namespace Graph.Test
         }
 
         [TestMethod]
-        public void RemovePeakMatrixFiveRemoveModern()
+        public void MatrixFiveModern()
         {
             UnweightedGraphMatrix graph = new UnweightedGraphMatrix(true, 5);
 
@@ -381,7 +359,7 @@ namespace Graph.Test
             Assert.IsFalse(graph.ContainsArc(peakCodes['b'], peakCodes['e']));
             Assert.IsFalse(graph.ContainsArc(peakCodes['e'], peakCodes['b']));
 
-            graph.RemovePeak(peakCodes['e']);
+            graph.RemovePeak(peakCodes['e']); // слетает Oriented // присваиваются не битовые матрицы
             peakCodes.Remove('e');
 
             Assert.AreEqual(3, graph.PeakCount);
@@ -393,6 +371,8 @@ namespace Graph.Test
             Assert.IsFalse(graph.ContainsArc(peakCodes['d'], peakCodes['a']));
             Assert.IsFalse(graph.ContainsArc(peakCodes['d'], peakCodes['b']));
         }
+
+
 
         // Проверить при HashSet пустой
     }

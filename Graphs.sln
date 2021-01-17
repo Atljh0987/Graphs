@@ -9,6 +9,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Graph.Test", "Graph.Test\Gr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Graph.Algorithm.Test", "Graph.Algorithm.Test\Graph.Algorithm.Test.csproj", "{99D73870-04DC-4C66-AB86-64B8E16037FF}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{530968C7-1C5D-4635-A60F-28A5D6D4349A}"
+	ProjectSection(SolutionItems) = preProject
+		Changes.txt = Changes.txt
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

@@ -50,12 +50,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="TriangleMatrixTest.cs" />
+    <Compile Include="WeightedListTestRemovePeaks.cs" />
+    <Compile Include="WeightedMatrixTest.cs" />
     <Compile Include="UnweightedMatrixTest.cs" />
     <Compile Include="UnweightedListTestRemovePeaks.cs" />
     <Compile Include="UnweightedListTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UnweightedMatrixTestRemovePeaks.cs" />
     <Compile Include="WeightedListTest.cs" />
+    <Compile Include="WeightedMatrixTestRemovePeaks.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

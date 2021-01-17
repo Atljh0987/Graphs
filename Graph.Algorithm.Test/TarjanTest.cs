@@ -7,26 +7,26 @@ using System.Collections.Generic;
 namespace Graph.Algorithm.Test
 {
     [TestClass]
-    public class KahnTest
+    public class TarjanTest
     {
         [TestMethod, ExpectedException(typeof(ArgumentException))]
         public void InputData()
         {
             UnweightedList graph = new UnweightedList(false);
-            Kahn.Run(graph);
+            Tarjan.Run(graph);
         }
 
         [TestMethod, ExpectedException(typeof(ArgumentNullException))]
         public void NullCheck()
         {
-            Kahn.Run(null);
+            Tarjan.Run(null);
         }
 
         [TestMethod]
         public void WithoutArcs()
         {
             UnweightedGraphMatrix graph = new UnweightedGraphMatrix(true, 5);
-            int[] result = Kahn.Run(graph);
+            int[] result = Tarjan.Run(graph);
 
             Assert.AreEqual(5, result.Length);
             Assert.AreEqual(0, result[0]);
@@ -45,9 +45,9 @@ namespace Graph.Algorithm.Test
 
             graph.AddArc(0, 2, 4);
 
-            Assert.AreEqual(1, Kahn.Run(new UnweightedGraphWrapper<int>(graph))[0]);
-            Assert.AreEqual(0, Kahn.Run(new UnweightedGraphWrapper<int>(graph))[1]);
-            Assert.AreEqual(2, Kahn.Run(new UnweightedGraphWrapper<int>(graph))[2]);
+            Assert.AreEqual(1, Tarjan.Run(new UnweightedGraphWrapper<int>(graph))[0]);
+            Assert.AreEqual(0, Tarjan.Run(new UnweightedGraphWrapper<int>(graph))[1]);
+            Assert.AreEqual(2, Tarjan.Run(new UnweightedGraphWrapper<int>(graph))[2]);
         }
 
         [TestMethod]
@@ -66,11 +66,11 @@ namespace Graph.Algorithm.Test
 
             graph.AddArc(3, 4);
 
-            Assert.AreEqual(0, Kahn.Run(graph)[0]);
-            Assert.AreEqual(1, Kahn.Run(graph)[1]);
-            Assert.AreEqual(2, Kahn.Run(graph)[2]);
-            Assert.AreEqual(3, Kahn.Run(graph)[3]);
-            Assert.AreEqual(4, Kahn.Run(graph)[4]);
+            Assert.AreEqual(0, Tarjan.Run(graph)[0]);
+            Assert.AreEqual(1, Tarjan.Run(graph)[1]);
+            Assert.AreEqual(2, Tarjan.Run(graph)[2]);
+            Assert.AreEqual(3, Tarjan.Run(graph)[3]);
+            Assert.AreEqual(4, Tarjan.Run(graph)[4]);
         }
 
         [TestMethod]
@@ -88,11 +88,11 @@ namespace Graph.Algorithm.Test
             graph.AddArc(4, 2);
             graph.AddArc(4, 1);
 
-            Assert.AreEqual(0, Kahn.Run(graph)[0]);
-            Assert.AreEqual(3, Kahn.Run(graph)[1]);
-            Assert.AreEqual(4, Kahn.Run(graph)[2]);
-            Assert.AreEqual(1, Kahn.Run(graph)[3]);
-            Assert.AreEqual(2, Kahn.Run(graph)[4]);
+            Assert.AreEqual(0, Tarjan.Run(graph)[0]);
+            Assert.AreEqual(3, Tarjan.Run(graph)[1]);
+            Assert.AreEqual(4, Tarjan.Run(graph)[2]);
+            Assert.AreEqual(1, Tarjan.Run(graph)[3]);
+            Assert.AreEqual(2, Tarjan.Run(graph)[4]);
         }
 
         [TestMethod, ExpectedException(typeof(ArgumentException))]
@@ -111,28 +111,28 @@ namespace Graph.Algorithm.Test
 
             graph.AddArc(5, 1);
 
-            Kahn.Run(graph);
+            Tarjan.Run(graph);
         }
 
-        //[TestMethod]
-        //public void KahnDifference()
-        //{       
-        //    UnweightedGraphMatrix graph = new UnweightedGraphMatrix(true, 6);
-        //    graph.AddArc(0, 1);
-        //    graph.AddArc(0, 2);
+        [TestMethod]
+        public void KahnDifference()
+        {       
+            UnweightedGraphMatrix graph = new UnweightedGraphMatrix(true, 6);
+            graph.AddArc(0, 1);
+            graph.AddArc(0, 2);
 
-        //    graph.AddArc(1, 2);
+            graph.AddArc(1, 2);
 
-        //    graph.AddArc(3, 1);
+            graph.AddArc(3, 1);
 
-        //    graph.AddArc(4, 2);
-        //    graph.AddArc(4, 1);
+            graph.AddArc(4, 2);
+            graph.AddArc(4, 1);
 
-        //    Assert.AreEqual(0, Kahn.Run(graph)[0]);
-        //    Assert.AreEqual(3, Kahn.Run(graph)[1]);
-        //    Assert.AreEqual(4, Kahn.Run(graph)[2]);
-        //    Assert.AreEqual(1, Kahn.Run(graph)[3]);
-        //    Assert.AreEqual(2, Kahn.Run(graph)[4]);
-        //}
+            Assert.AreEqual(0, Tarjan.Run(graph)[0]);
+            Assert.AreEqual(3, Tarjan.Run(graph)[1]);
+            Assert.AreEqual(4, Tarjan.Run(graph)[2]);
+            Assert.AreEqual(1, Tarjan.Run(graph)[3]);
+            Assert.AreEqual(2, Tarjan.Run(graph)[4]);
+        }
     }
 }

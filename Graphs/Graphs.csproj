@@ -43,6 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Algorithms\Kahn.cs" />
+    <Compile Include="Algorithms\Tarjan.cs" />
     <Compile Include="Matrixes\BitsSquareMatrix.cs" />
     <Compile Include="Matrixes\BitsTriangleMatrix.cs" />
     <Compile Include="IGraph.cs" />

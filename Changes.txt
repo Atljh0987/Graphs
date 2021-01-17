@@ -1,0 +1,14 @@
+18.01.2021
+
+// Исправленные
+
+InArcCount оптимизировал в UnweightedGraphMatrix
+Не добавили проверку существования ребра перед удалением. Исправлено в UnweightedGraphMatrix.
+Добавил тесты на DeleteArc в UnweightedGraphMatrix, вообще их не было.
+Добавил тесты на ArcCount в UnweightedGraphMatrix
+
+// Проблемы
+
+UnweightedGraphMatrix:
+Удаление последней вершины, должно создавать искл, потому что создать с нулем невозможно OverflowException
+Не удаляется нулевая вершина в неориентированном

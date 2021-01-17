@@ -16,6 +16,8 @@ namespace Graphs
 
         private IMatrix<Arc> matrix;
 
+        private int[] inArcsCount;
+
         public bool Oriented => matrix is SquareMatrix<Arc>;
 
         public int PeakCount => matrix.Length;
@@ -24,6 +26,7 @@ namespace Graphs
         {
             if (oriented) matrix = new SquareMatrix<Arc>(peaks);
             else matrix = new TriangleMatrix<Arc>(peaks);
+            inArcsCount = new int[peaks];
         }
 
         public bool AddArc(int from, int to, T weight)
@@ -31,6 +34,8 @@ namespace Graphs
             CheckPeaks(from, to);
             bool result = !matrix[from, to].Exist;
             matrix[from, to] = new Arc() { Exist = true, Weight = weight };
+            inArcsCount[to]++;
+            if (!Oriented) inArcsCount[from]++;
             return result;
         }
 
@@ -76,7 +81,9 @@ namespace Graphs
         {
             CheckPeaks(from, to);
             bool result = matrix[from, to].Exist;
-            if (result) matrix[from, to] = new Arc { Exist = false, Weight = default(T) } ;
+            if (result) matrix[from, to] = new Arc { Exist = false, Weight = default(T) };
+            inArcsCount[to]++;
+            if (!Oriented) inArcsCount[from]--;
             return result;
         }
 
@@ -88,15 +95,7 @@ namespace Graphs
 
         public int InArcsCount(int peak)
         {
-            int count = 0;
-
-            for (int i = 0; i < matrix.Length; i++)
-            {
-                if (i != peak && matrix[i, peak].Exist)
-                    count++;
-            }
-
-            return count;
+            return inArcsCount[peak];
         }
 
         public IEnumerable<Tuple<int, T>> InComingArcs(int peak)
