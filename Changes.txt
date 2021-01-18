@@ -7,8 +7,13 @@ InArcCount оптимизировал в UnweightedGraphMatrix
 ƒобавил тесты на DeleteArc в UnweightedGraphMatrix, вообще их не было.
 ƒобавил тесты на ArcCount в UnweightedGraphMatrix
 
-// ѕроблемы
+Ќе удал€етс€ нулева€ вершина в неориентированном в матрицах ... 
+x * Length + y - 1 - x * (x + 3) / 2 в BitsTriangleMatrix при нул€х равн€етс€ -1.  ор€во исправлено
 
+// ѕроблемы
 UnweightedGraphMatrix:
+
 ”даление последней вершины, должно создавать искл, потому что создать с нулем невозможно OverflowException
-Ќе удал€етс€ нулева€ вершина в неориентированном
+832, 833 строка, пустой Enumerator равен нулю
+ѕереименовать бы на RemovePeak на DeletePeak
+InComingArcs, OutGoingArcs кор€вые тесы, надо поправить через Hashset

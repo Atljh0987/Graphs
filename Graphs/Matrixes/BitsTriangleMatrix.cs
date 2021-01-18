@@ -31,6 +31,8 @@ namespace Graphs
 
             if (x > y)
                 return y * Length + x - 1 - y * (y + 3) / 2;
+            else if (x == 0 && y == 0)
+                return 0;
             else
                 return x * Length + y - 1 - x * (x + 3) / 2;
         }

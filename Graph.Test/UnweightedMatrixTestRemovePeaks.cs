@@ -13,9 +13,6 @@ namespace Graph.Test
             public int this[char code] => IndexOf(code);
         }
 
-        
-
-
         [TestMethod]
         public void ThreeElFromEndCorrect()
         {

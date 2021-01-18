@@ -2,14 +2,21 @@
 using Graphs;
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Linq;
 
 namespace Graph.Test
 {
     [TestClass]
     public class UnweightedMatrixTest
     {
-        #region GraphInGeneral
+        class PeakCodes : List<char>
+        {
+            public int this[char code] => IndexOf(code);
+        }
 
+        // -- Simple
+
+        #region Graph Creation
         [TestMethod, ExpectedException(typeof(OverflowException))]
         public void GraphLessZeroPeaks()
         {
@@ -20,6 +27,24 @@ namespace Graph.Test
         public void GraphOrLessZeroPeaks()
         {
             UnweightedGraphMatrix graph = new UnweightedGraphMatrix(true, -3);
+        }
+
+        #endregion
+
+        #region Oriented
+
+        [TestMethod]
+        public void Oriented()
+        {
+            UnweightedGraphMatrix graph = new UnweightedGraphMatrix(false, 1);
+            Assert.IsFalse(graph.Oriented);
+        }
+
+        [TestMethod]
+        public void OrientedOr()
+        {
+            UnweightedGraphMatrix graph = new UnweightedGraphMatrix(true, 1);
+            Assert.IsTrue(graph.Oriented);
         }
 
         #endregion
@@ -629,145 +654,489 @@ namespace Graph.Test
 
         #endregion
 
-        [TestMethod]
-        public void OutComingArcsOriented()
-        {
-            UnweightedGraphMatrix graph = new UnweightedGraphMatrix(true, 2);            
-            graph.AddArc(0, 1);
-            Assert.AreEqual(2, graph.PeakCount);
-            Assert.IsTrue(graph.ContainsArc(0, 1));
-            Assert.IsFalse(graph.ContainsArc(1, 0));
-            Assert.IsTrue(graph.Oriented);
-        }
+        #region OutGoingArcs
 
         [TestMethod]
-        public void OutComingArcsUnoriented()
-        {
-            UnweightedGraphMatrix graph = new UnweightedGraphMatrix(false, 2);
-            graph.AddArc(0, 1);
-            Assert.AreEqual(2, graph.PeakCount);
-            Assert.IsTrue(graph.ContainsArc(0, 1));
-            Assert.IsTrue(graph.ContainsArc(1, 0));
-            Assert.IsFalse(graph.Oriented);
-        }
-
-        [TestMethod, ExpectedException(typeof(IndexOutOfRangeException))]
-        public void IncorrectPeak()
-        {
-            UnweightedGraphMatrix graph = new UnweightedGraphMatrix(true, 1);
-            graph.AddArc(0, 1);
-        }
-
-        [TestMethod]
-        public void IncomingArcsRemovePeak()
+        public void OutGoingArcs()
         {
             UnweightedGraphMatrix graph = new UnweightedGraphMatrix(false, 3);
-            graph.AddArc(0, 2);
-            graph.AddArc(1, 0);
+            graph.AddArc(0, 1);
             graph.AddArc(1, 2);
+            graph.AddArc(2, 0);
 
-            Assert.IsTrue(graph.ContainsArc(0, 2));
+            int i = 0;
+            int[] zero = { 1, 2 };
+            int[] one = { 0, 2 };
+            int[] two = { 0, 1 };
 
-            int[] ans = new int[] { 0, 1 };
-            int ind = 0;
-
-            foreach (var el in graph.InComingArcs(2))
+            foreach (var e in graph.OutGoingArcs(0))
             {
-                Assert.IsTrue(el == ans[ind]);
-                ind++;
+                Assert.IsTrue(graph.OutGoingArcs(0).Count() == zero.Length);
+                Assert.IsTrue(zero[i] == e);
+                i++;
             }
 
-            ind = 0;
+            i = 0;
 
-            graph.RemovePeak(2);
+            foreach (var e in graph.OutGoingArcs(1))
+            {
+                Assert.IsTrue(graph.OutGoingArcs(1).Count() == one.Length);
+                Assert.IsTrue(one[i] == e);
+                i++;
+            }
 
-            foreach (var el in graph.InComingArcs(0))
-                Assert.AreEqual(1, el);
+            i = 0;
 
-            foreach (var el in graph.InComingArcs(1))
-                Assert.AreEqual(0, el);
+            foreach (var e in graph.OutGoingArcs(2))
+            {
+                Assert.IsTrue(graph.OutGoingArcs(2).Count() == two.Length);
+                Assert.IsTrue(two[i] == e);
+                i++;
+            }
         }
 
         [TestMethod]
-        public void OutgoingArcsRemovePeak()
+        public void OutGoingArcsOr()
         {
             UnweightedGraphMatrix graph = new UnweightedGraphMatrix(true, 3);
+            graph.AddArc(0, 1);
             graph.AddArc(0, 2);
             graph.AddArc(1, 0);
             graph.AddArc(1, 2);
+            graph.AddArc(2, 0);
 
-            Assert.IsTrue(graph.ContainsArc(0, 2));
+            int i = 0;
+            int[] zero = { 1, 2 };
+            int[] one = { 0, 2 };
+            int[] two = { 0 };
 
-            int[] ans = new int[] { 0, 2 };
-            int ind = 0;
-
-            foreach (var el in graph.OutGoingArcs(1))
+            foreach (var e in graph.OutGoingArcs(0))
             {
-                Assert.IsTrue(el == ans[ind]);
-                ind++;
+                Assert.IsTrue(graph.OutGoingArcs(0).Count() == zero.Length);
+                Assert.IsTrue(zero[i] == e);
+                i++;
             }
 
-            ind = 0;
+            i = 0;
 
-            Assert.IsTrue(graph.ContainsArc(0, 2));
+            foreach (var e in graph.OutGoingArcs(1))
+            {
+                Assert.IsTrue(graph.OutGoingArcs(1).Count() == one.Length);
+                Assert.IsTrue(one[i] == e);
+                i++;
+            }
 
-            graph.RemovePeak(2);
+            i = 0;
 
-            foreach (var el in graph.OutGoingArcs(1))
-                Assert.AreEqual(0, el);
-
-            foreach (var el in graph.OutGoingArcs(0))
-                Assert.AreEqual(0, el);
+            foreach (var e in graph.OutGoingArcs(2))
+            {
+                Assert.IsTrue(graph.OutGoingArcs(2).Count() == two.Length);
+                Assert.IsTrue(two[i] == e);
+                i++;
+            }
         }
 
         [TestMethod]
-        public void IncomingArcsCount()
+        public void OutGoingArcsEmptyPeak()
         {
-            UnweightedGraphMatrix graph = new UnweightedGraphMatrix(false, 5);
+            UnweightedGraphMatrix graph = new UnweightedGraphMatrix(false, 3);
             graph.AddArc(0, 1);
-            Assert.AreEqual(1, graph.InArcsCount(1));
+
+            Assert.IsTrue(graph.OutGoingArcs(2).Count() == 0);
+            foreach (var e in graph.OutGoingArcs(2))
+            {
+                Assert.AreEqual(0, graph.OutGoingArcs(2));
+                Assert.AreEqual(0, e);
+            }
+        }
+
+        [TestMethod]
+        public void OutGoingArcsOrEmptyPeak()
+        {
+            UnweightedGraphMatrix graph = new UnweightedGraphMatrix(true, 3);
+            graph.AddArc(0, 1);
+
+            Assert.IsTrue(graph.OutGoingArcs(2).Count() == 0);
+            foreach (var e in graph.OutGoingArcs(2))
+            {
+                Assert.AreEqual(0, graph.OutGoingArcs(2));
+                Assert.AreEqual(0, e);
+            }
+        }
+
+        #endregion
+
+        #region InComingArcs
+
+        [TestMethod]
+        public void InComingArcs()
+        {
+            UnweightedGraphMatrix graph = new UnweightedGraphMatrix(false, 3);
+            graph.AddArc(0, 1);
+            graph.AddArc(1, 2);
+            graph.AddArc(2, 0);
+
+            int i = 0;
+            int[] zero = { 1, 2 };
+            int[] one = { 0, 2 };
+            int[] two = { 0, 1 };
+
+            Assert.IsTrue(graph.InComingArcs(0).Count() == zero.Length);
+            foreach (var e in graph.InComingArcs(0))
+            {
+                Assert.IsTrue(zero[i] == e);
+                i++;
+            }
+
+            i = 0;
+
+            Assert.IsTrue(graph.InComingArcs(1).Count() == one.Length);
+            foreach (var e in graph.InComingArcs(1))
+            {
+                Assert.IsTrue(one[i] == e);
+                i++;
+            }
+
+            i = 0;
+
+            Assert.IsTrue(graph.InComingArcs(2).Count() == two.Length);
+            foreach (var e in graph.InComingArcs(2))
+            {
+                Assert.IsTrue(two[i] == e);
+                i++;
+            }
+        }
+
+        [TestMethod]
+        public void InComingArcsOr()
+        {
+            UnweightedGraphMatrix graph = new UnweightedGraphMatrix(true, 3);
+            graph.AddArc(0, 1);
+            graph.AddArc(0, 2);
+            graph.AddArc(1, 0);
+            graph.AddArc(1, 2);
+            graph.AddArc(2, 0);
+
+            int i = 0;
+            int[] zero = { 1, 2 };
+            int[] one = { 0 };
+            int[] two = { 0, 1 };
+
+            Assert.IsTrue(graph.InComingArcs(0).Count() == zero.Length);
+            foreach (var e in graph.InComingArcs(0))
+            {
+                Assert.IsTrue(zero[i] == e);
+                i++;
+            }
+
+            i = 0;
+
+            Assert.IsTrue(graph.InComingArcs(1).Count() == one.Length);
+            foreach (var e in graph.InComingArcs(1))
+            {
+                Assert.IsTrue(one[i] == e);
+                i++;
+            }
+
+            i = 0;
+
+            Assert.IsTrue(graph.InComingArcs(2).Count() == two.Length);
+            foreach (var e in graph.InComingArcs(2))
+            {
+                Assert.IsTrue(two[i] == e);
+                i++;
+            }
+        }
+
+        [TestMethod]
+        public void InComingArcsEmptyPeak()
+        {
+            UnweightedGraphMatrix graph = new UnweightedGraphMatrix(false, 3);
+            graph.AddArc(0, 1);
+
+            Assert.IsTrue(graph.InComingArcs(2).Count() == 0);
+            foreach (var e in graph.InComingArcs(2))
+            {
+                Assert.AreEqual(0, graph.InComingArcs(2));
+                Assert.AreEqual(0, e);
+            }
+        }
+
+        [TestMethod]
+        public void InComingArcsOrEmptyPeak()
+        {
+            UnweightedGraphMatrix graph = new UnweightedGraphMatrix(true, 3);
+            graph.AddArc(0, 1);
+
+            Assert.IsTrue(graph.InComingArcs(2).Count() == 0);
+            foreach (var e in graph.InComingArcs(2))
+            {
+                Assert.AreEqual(0, graph.InComingArcs(2));
+                Assert.AreEqual(0, e);
+            }
+        }
+        #endregion
+
+        // -- Combine
+
+        #region Combine
+
+        [TestMethod]
+        public void Combine()
+        {
+            UnweightedGraphMatrix graph = new UnweightedGraphMatrix(false, 2);
+            Assert.IsFalse(graph.Oriented);
+            Assert.AreEqual(2, graph.PeakCount);
+
+            // AddArc ==================
+
+            graph.AddArc(0, 1);
+
+            Assert.IsTrue(graph.ContainsArc(0, 1));
+            Assert.IsTrue(graph.ContainsArc(1, 0));
+
             Assert.AreEqual(1, graph.InArcsCount(0));
+            Assert.AreEqual(1, graph.InArcsCount(1));
 
-            graph.AddArc(1, 2);
-            Assert.AreEqual(2, graph.InArcsCount(1));
-            Assert.AreEqual(1, graph.InArcsCount(2));
+            Assert.IsTrue(graph.OutGoingArcs(0).Count() == 1);
+            foreach (var e in graph.OutGoingArcs(0))
+                Assert.AreEqual(1, e);
 
-            graph.AddArc(3, 2);
-            Assert.AreEqual(2, graph.InArcsCount(2));
-            Assert.AreEqual(1, graph.InArcsCount(3));
+            Assert.IsTrue(graph.OutGoingArcs(1).Count() == 1);
+            foreach (var e in graph.OutGoingArcs(1))
+                Assert.AreEqual(0, e);
 
-            graph.AddArc(4, 2);
-            Assert.AreEqual(3, graph.InArcsCount(2));
-            Assert.AreEqual(1, graph.InArcsCount(4));
+            Assert.IsTrue(graph.InComingArcs(0).Count() == 1);
+            foreach (var e in graph.InComingArcs(0))
+                Assert.AreEqual(1, e);
+
+            Assert.IsTrue(graph.InComingArcs(1).Count() == 1);
+            foreach (var e in graph.InComingArcs(1))
+                Assert.AreEqual(0, e);
+
+            // AddPeak ==================
+
+            graph.AddPeak();
+            Assert.AreEqual(3, graph.PeakCount);
 
             graph.AddArc(0, 2);
-            Assert.AreEqual(4, graph.InArcsCount(2));
+            Assert.IsTrue(graph.ContainsArc(0, 2));
+            Assert.IsTrue(graph.ContainsArc(2, 0));
             Assert.AreEqual(2, graph.InArcsCount(0));
+            Assert.AreEqual(1, graph.InArcsCount(2));
+
+            int[] zeroIn = { 1, 2 };
+            int zeroInInd = 0;
+            Assert.IsTrue(graph.InComingArcs(0).Count() == 2);
+            foreach (var e in graph.InComingArcs(0))
+            {
+                Assert.AreEqual(zeroIn[zeroInInd], e);
+                zeroInInd++;
+            }
+
+            Assert.IsTrue(graph.InComingArcs(2).Count() == 1);
+            foreach (var e in graph.InComingArcs(2))
+                Assert.AreEqual(0, e);
+
+            int[] zeroOut = { 1, 2 };
+            int zeroOutInd = 0;
+            Assert.IsTrue(graph.OutGoingArcs(0).Count() == 2);
+            foreach (var e in graph.OutGoingArcs(0))
+            {
+                Assert.AreEqual(zeroOut[zeroOutInd], e);
+                zeroOutInd++;
+            }
+
+            Assert.IsTrue(graph.OutGoingArcs(2).Count() == 1);
+            foreach (var e in graph.OutGoingArcs(2))
+                Assert.AreEqual(0, e);
+
+            graph.AddPeak();
+            graph.AddArc(3, 2);
+            graph.DeleteArc(2, 0);
+            graph.RemovePeak(1);
+
+            // Проверка ребер
+
+            Assert.IsFalse(graph.ContainsArc(0, 1));
+            Assert.IsFalse(graph.ContainsArc(1, 0));
+            Assert.IsFalse(graph.ContainsArc(0, 2));
+            Assert.IsFalse(graph.ContainsArc(2, 0));
+            Assert.IsTrue(graph.ContainsArc(1, 2));
+            Assert.IsTrue(graph.ContainsArc(2, 1));
+
+            // Проверка вершин
+
+            // Нулевая
+
+            Assert.AreEqual(0, graph.InArcsCount(0));
+
+            Assert.IsTrue(graph.OutGoingArcs(0).Count() == 0);
+            foreach (var e in graph.OutGoingArcs(0))
+                Assert.AreEqual(0, e);
+
+            Assert.IsTrue(graph.InComingArcs(0).Count() == 0);
+            foreach (var e in graph.InComingArcs(0))
+                Assert.AreEqual(0, e);
+
+            // Первая
+
+            Assert.AreEqual(1, graph.InArcsCount(1));
+
+            Assert.IsTrue(graph.OutGoingArcs(1).Count() == 1);
+            foreach (var e in graph.OutGoingArcs(1))
+                Assert.AreEqual(2, e);
+
+            Assert.IsTrue(graph.InComingArcs(1).Count() == 1);
+            foreach (var e in graph.InComingArcs(1))
+                Assert.AreEqual(2, e);
+
+            // Вторая
+
+            Assert.AreEqual(1, graph.InArcsCount(2));
+
+            Assert.IsTrue(graph.OutGoingArcs(2).Count() == 1);
+            foreach (var e in graph.OutGoingArcs(2))
+                Assert.AreEqual(1, e);
+
+            Assert.IsTrue(graph.InComingArcs(2).Count() == 1);
+            foreach (var e in graph.InComingArcs(2))
+                Assert.AreEqual(1, e);
+
+
+            // Завершение
+
+            Assert.IsFalse(graph.Oriented);
+            Assert.AreEqual(3, graph.PeakCount);
         }
 
         [TestMethod]
-        public void IncomingArcsCountOriented()
+        public void CombineOr()
         {
-            UnweightedGraphMatrix graph = new UnweightedGraphMatrix(true, 5);
+            UnweightedGraphMatrix graph = new UnweightedGraphMatrix(true, 2);
+            Assert.IsTrue(graph.Oriented);
+            Assert.AreEqual(2, graph.PeakCount);
+
+            // AddArc ==================
+
             graph.AddArc(0, 1);
-            Assert.AreEqual(1, graph.InArcsCount(1));
+
+            Assert.IsTrue(graph.ContainsArc(0, 1));
+            Assert.IsFalse(graph.ContainsArc(1, 0));
+
             Assert.AreEqual(0, graph.InArcsCount(0));
-
-            graph.AddArc(1, 2);
             Assert.AreEqual(1, graph.InArcsCount(1));
-            Assert.AreEqual(1, graph.InArcsCount(2));
 
-            graph.AddArc(3, 2);
-            Assert.AreEqual(2, graph.InArcsCount(2));
-            Assert.AreEqual(0, graph.InArcsCount(3));
+            Assert.IsTrue(graph.OutGoingArcs(0).Count() == 1);
+            foreach (var e in graph.OutGoingArcs(0))
+                Assert.AreEqual(1, e);            
 
-            graph.AddArc(4, 2);
-            Assert.AreEqual(3, graph.InArcsCount(2));
-            Assert.AreEqual(0, graph.InArcsCount(4));
+            Assert.IsTrue(graph.InComingArcs(0).Count() == 0);
+            foreach (var e in graph.InComingArcs(0))
+                Assert.AreEqual(0, e);
+
+            Assert.IsTrue(graph.OutGoingArcs(1).Count() == 0);
+            foreach (var e in graph.OutGoingArcs(1))
+                Assert.AreEqual(0, e);
+
+            Assert.IsTrue(graph.InComingArcs(1).Count() == 1);
+            foreach (var e in graph.InComingArcs(1))
+                Assert.AreEqual(0, e);
+
+            // AddPeak ==================
+
+            graph.AddPeak();
+            Assert.AreEqual(3, graph.PeakCount);
 
             graph.AddArc(0, 2);
-            Assert.AreEqual(4, graph.InArcsCount(2));
+            Assert.IsTrue(graph.ContainsArc(0, 2));
+            Assert.IsFalse(graph.ContainsArc(2, 0));
             Assert.AreEqual(0, graph.InArcsCount(0));
+            Assert.AreEqual(1, graph.InArcsCount(2));
+
+
+            Assert.IsTrue(graph.InComingArcs(0).Count() == 0);
+            foreach (var e in graph.InComingArcs(0))
+                Assert.AreEqual(0, e);
+
+            Assert.IsTrue(graph.InComingArcs(2).Count() == 1);
+            foreach (var e in graph.InComingArcs(2))
+                Assert.AreEqual(0, e);
+
+            int[] zeroOut = { 1, 2 };
+            int zeroOutInd = 0;
+            Assert.IsTrue(graph.OutGoingArcs(0).Count() == 2);
+            foreach (var e in graph.OutGoingArcs(0))
+            {
+                Assert.AreEqual(zeroOut[zeroOutInd], e);
+                zeroOutInd++;
+            }
+
+            Assert.IsTrue(graph.OutGoingArcs(2).Count() == 0);
+            foreach (var e in graph.OutGoingArcs(2))
+                Assert.AreEqual(0, e);
+
+            graph.AddPeak();
+            graph.AddArc(3, 2);
+
+            Assert.AreEqual(2, graph.InArcsCount(2));
+
+            graph.DeleteArc(0, 2);
+            graph.RemovePeak(1);
+
+            // Проверка ребер
+
+            Assert.IsFalse(graph.ContainsArc(0, 1));
+            Assert.IsFalse(graph.ContainsArc(1, 0));
+            Assert.IsFalse(graph.ContainsArc(0, 2));
+            Assert.IsFalse(graph.ContainsArc(2, 0));
+            Assert.IsFalse(graph.ContainsArc(1, 2));
+            Assert.IsTrue(graph.ContainsArc(2, 1));
+
+            // Проверка вершин
+
+            // Нулевая
+
+            Assert.AreEqual(0, graph.InArcsCount(0));
+
+            Assert.IsTrue(graph.OutGoingArcs(0).Count() == 0);
+            foreach (var e in graph.OutGoingArcs(0))
+                Assert.AreEqual(0, e);
+
+            Assert.IsTrue(graph.InComingArcs(0).Count() == 0);
+            foreach (var e in graph.InComingArcs(0))
+                Assert.AreEqual(0, e);
+
+            // Первая
+
+            Assert.AreEqual(1, graph.InArcsCount(1));
+
+            Assert.IsTrue(graph.OutGoingArcs(1).Count() == 0);
+            foreach (var e in graph.OutGoingArcs(1))
+                Assert.AreEqual(0, e);
+
+            Assert.IsTrue(graph.InComingArcs(1).Count() == 1);
+            foreach (var e in graph.InComingArcs(1))
+                Assert.AreEqual(2, e);
+
+            // Вторая
+
+            Assert.AreEqual(0, graph.InArcsCount(2));
+
+            Assert.IsTrue(graph.OutGoingArcs(2).Count() == 1);
+            foreach (var e in graph.OutGoingArcs(2))
+                Assert.AreEqual(1, e);
+
+            Assert.IsTrue(graph.InComingArcs(2).Count() == 0);
+            foreach (var e in graph.InComingArcs(2))
+                Assert.AreEqual(0, e);
+
+            // Завершение
+
+            Assert.IsTrue(graph.Oriented);
+            Assert.AreEqual(3, graph.PeakCount);
         }
+        #endregion
+
     }
 }

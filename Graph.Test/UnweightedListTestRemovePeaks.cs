@@ -6,12 +6,12 @@ using System.Collections.Generic;
 namespace Graph.Test
 {
     [TestClass]
-    public class UnweightedListTestRemovePeak
+    public class UnweightedGraphListTestRemovePeak
     {
         [TestMethod]
         public void CountAfterRemove()
         {
-            UnweightedList graph = new UnweightedList(false);
+            UnweightedGraphList graph = new UnweightedGraphList(false);
             graph.AddPeak();
             graph.AddPeak();
             graph.AddPeak();
@@ -27,7 +27,7 @@ namespace Graph.Test
         [TestMethod, ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void RangeException()
         {
-            UnweightedList graph = new UnweightedList(false);
+            UnweightedGraphList graph = new UnweightedGraphList(false);
             graph.AddPeak();
             graph.AddPeak();
             graph.AddPeak();
@@ -42,7 +42,7 @@ namespace Graph.Test
         [TestMethod]
         public void ThreeElFromEndCorrect()
         {
-            UnweightedList graph = new UnweightedList(false);
+            UnweightedGraphList graph = new UnweightedGraphList(false);
             graph.AddPeak();
             graph.AddPeak();
             graph.AddPeak();
@@ -62,7 +62,7 @@ namespace Graph.Test
         [TestMethod, ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void ThreeElFromEndInorrect()
         {
-            UnweightedList graph = new UnweightedList(false);
+            UnweightedGraphList graph = new UnweightedGraphList(false);
             graph.AddPeak();
             graph.AddPeak();
             graph.AddPeak();
@@ -79,7 +79,7 @@ namespace Graph.Test
         [TestMethod]
         public void ThreeElFromMiddleCorrect()
         {
-            UnweightedList graph = new UnweightedList(false);
+            UnweightedGraphList graph = new UnweightedGraphList(false);
             graph.AddPeak();
             graph.AddPeak();
             graph.AddPeak();
@@ -97,7 +97,7 @@ namespace Graph.Test
         [TestMethod, ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void ThreeElFromMiddleIncorrect()
         {
-            UnweightedList graph = new UnweightedList(false);
+            UnweightedGraphList graph = new UnweightedGraphList(false);
             graph.AddPeak();
             graph.AddPeak();
             graph.AddPeak();
@@ -114,7 +114,7 @@ namespace Graph.Test
         [TestMethod]
         public void FiveElFromMiddleCorrect()
         {
-            UnweightedList graph = new UnweightedList(false);
+            UnweightedGraphList graph = new UnweightedGraphList(false);
             graph.AddPeak();
             graph.AddPeak();
             graph.AddPeak();
@@ -161,7 +161,7 @@ namespace Graph.Test
         [TestMethod]
         public void SevenElFromMiddleCorrect()
         {
-            UnweightedList graph = new UnweightedList(true);
+            UnweightedGraphList graph = new UnweightedGraphList(true);
             graph.AddPeak();
             graph.AddPeak();
             graph.AddPeak();
@@ -245,7 +245,7 @@ namespace Graph.Test
         [TestMethod]
         public void FiveModern()
         {
-            UnweightedList graph = new UnweightedList(true);
+            UnweightedGraphList graph = new UnweightedGraphList(true);
             graph.AddPeak();
             graph.AddPeak();
             graph.AddPeak();

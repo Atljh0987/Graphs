@@ -12,7 +12,7 @@ namespace Graph.Algorithm.Test
         [TestMethod, ExpectedException(typeof(ArgumentException))]
         public void InputData()
         {
-            UnweightedList graph = new UnweightedList(false);
+            UnweightedGraphList graph = new UnweightedGraphList(false);
             Tarjan.Run(graph);
         }
 

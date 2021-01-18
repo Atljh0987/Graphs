@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace Graphs
 {
-    public class UnweightedList : IUnweightedGraph
+    public class UnweightedGraphList : IUnweightedGraph
     {
         private readonly List<HashSet<int>> forward = new List<HashSet<int>>();
         private readonly List<HashSet<int>> reverse;
         public bool Oriented => reverse != null;
         
         public int PeakCount => forward.Count;
-        public UnweightedList(bool oriented)
+        public UnweightedGraphList(bool oriented)
         {
             if (oriented) reverse = new List<HashSet<int>>();
         }
@@ -24,6 +24,8 @@ namespace Graphs
         {
             if ((uint) to >= (uint)PeakCount)    // забыл почему from не может выйти за границы? List проверяет правильность from
                 throw new IndexOutOfRangeException("to");
+            if (forward[from].Contains(to))
+                throw new ArgumentException("Arc is already exist");
             CheckPeaks(from, to);
             bool result = forward[from].Add(to);
             if (reverse != null) reverse[to].Add(from);
@@ -49,6 +51,8 @@ namespace Graphs
         {
             if (to < 0 || to >= PeakCount)
                 throw new ArgumentOutOfRangeException("to");
+            if (!forward[from].Contains(to))
+                throw new ArgumentException("Arc doesn't exist");
             CheckPeaks(from, to);
             bool result = forward[from].Remove(to);
             if (reverse != null) reverse[to].Remove(from);
